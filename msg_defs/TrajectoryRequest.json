@@ -1,0 +1,34 @@
+{
+    "name": "TrajectoryRequest",
+    "version": "1.0.0",
+    "package": "trajectory_service_msgs",
+    "fields": [
+      {
+        "name": "end_effector",
+        "type": "string"
+      },
+      {
+        "name": "start_q",
+        "type": "JS",
+        "package": "sensor"
+      },
+      {
+        "name": "end_pose",
+        "type": "Transform",
+        "package": "geometry"
+      },
+      {
+        "name": "step_size",
+        "type": "double"
+      },
+      {
+        "name": "error",
+        "type": "double"
+      },
+      {
+        "name": "max_iterations",
+        "type": "uint32"
+      }
+    ]
+  }
+  
