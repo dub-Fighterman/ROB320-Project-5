@@ -1,0 +1,7 @@
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/project5.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/generated_kinematics_tests.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/trajectory_service.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/setpoint_controller.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/rixhub.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/edit_cache.dir
+/home/oicw/Study/ROB320/Project/Project 5/build/CMakeFiles/rebuild_cache.dir

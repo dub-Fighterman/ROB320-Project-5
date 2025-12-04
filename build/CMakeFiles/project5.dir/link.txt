@@ -1,0 +1,2 @@
+/usr/bin/ar qc libproject5.a CMakeFiles/project5.dir/src/rix/robot/kinematics_solver.cpp.o
+/usr/bin/ranlib libproject5.a
