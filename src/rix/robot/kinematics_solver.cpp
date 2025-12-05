@@ -134,14 +134,15 @@ Eigen::MatrixXd KinematicsSolver::get_jacobian(const std::vector<std::shared_ptr
     // TODO: Implement Jacobian calculation (store the current end effector transform into ee_transform for later use)
     const std::vector<std::shared_ptr<Joint>> &forward_chain = chain;
 
-    Eigen::Affine3d T = msg_to_eigen(robot_->get_world_to_root());
+    Eigen::Affine3d T = msg_to_eigen(transform_identity());
 
     std::vector<Eigen::Vector3d> axes_world;
     std::vector<Eigen::Vector3d> origins_world;
+    std::vector<Eigen::Affine3d> T_push;
     axes_world.reserve(forward_chain.size());
     origins_world.reserve(forward_chain.size());
 
-    for (const auto &joint : forward_chain) {
+    /*for (const auto &joint : forward_chain) {
         Eigen::Affine3d origin_tf = msg_to_eigen(joint->origin());
         Eigen::Affine3d joint_frame = T * origin_tf;
 
@@ -162,6 +163,13 @@ Eigen::MatrixXd KinematicsSolver::get_jacobian(const std::vector<std::shared_ptr
         }
 
         T = joint_frame * motion_tf;
+    }*/
+    for (const auto &joint : forward_chain) {
+        Eigen::Affine3d origin_tf = msg_to_eigen(joint->origin());
+        Eigen::Affine3d X = msg_to_eigen(joint->transform());
+        T = T * origin_tf;
+        T_push.push_back(T);
+        T = T * X;
     }
 
     ee_transform = T;
