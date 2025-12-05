@@ -105,22 +105,22 @@ rix::msg::geometry::Transform KinematicsSolver::solve_fk(const std::string &link
     // TODO: Implement forward kinematics
     auto chain = robot_->get_joints_in_chain(link);
 
-    Eigen::Affine3d T = msg_to_eigen(robot_->get_world_to_root());
+    Eigen::Affine3d T = msg_to_eigen(transform_identity());
 
     for (const auto &joint : chain) {
 
         Eigen::Affine3d origin_tf = msg_to_eigen(joint->origin());
-        Eigen::Affine3d motion_tf = Eigen::Affine3d::Identity();
+        Eigen::Affine3d motion_tf = msg_to_eigen(joint->transform());
         Eigen::Vector3d axis = msg_to_eigen(joint->axis());
-        if (axis.norm() > 0) {
+        /*if (axis.norm() > 0) {
             axis.normalize();
-        }
+        }*/
 
-        if (joint->type() == Joint::REVOLUTE || joint->type() == Joint::CONTINUOUS) {
+        /*if (joint->type() == Joint::REVOLUTE || joint->type() == Joint::CONTINUOUS) {
             motion_tf = Eigen::AngleAxisd(joint->position(), axis);
         } else if (joint->type() == Joint::PRISMATIC) {
             motion_tf.translation() = axis * joint->position();
-        }
+        }*/
 
         T = T * origin_tf * motion_tf;
     }
@@ -180,12 +180,16 @@ Eigen::MatrixXd KinematicsSolver::get_jacobian(const std::vector<std::shared_ptr
         Eigen::Vector3d linear = Eigen::Vector3d::Zero();
         Eigen::Vector3d angular = Eigen::Vector3d::Zero();
 
+        Eigen::Vector3d axis_local = msg_to_eigen(forward_chain[i]->axis());
+        Eigen::Vector3d axis_world = T_push[i].linear() * axis_local;
+        Eigen::Vector3d origin_world = T_push[i].translation();
+
         auto joint = forward_chain[i];
         if (joint->type() == Joint::PRISMATIC) {
-            linear = axes_world[i];
+            linear = axis_world;
         } else if (joint->type() == Joint::REVOLUTE || joint->type() == Joint::CONTINUOUS) {
-            angular = axes_world[i];
-            linear = axes_world[i].cross(ee_pos - origins_world[i]);
+            angular = axis_world;
+            linear = axis_world.cross(ee_pos - origin_world);
         }
 
         J.block<3, 1>(0, i) = linear;
